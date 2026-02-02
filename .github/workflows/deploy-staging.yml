@@ -1,0 +1,24 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to staging server
+        run: |
+          echo "Deploying to staging environment"
+          # Add your deployment commands here
+          # This could include:
+          # - SSH into server
+          # - Pull latest code
+          # - Run migrations
+          # - Restart services
