@@ -1,14 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
-import { Layout } from './components/layout/Layout'
-import { HomePage } from './pages/HomePage'
-import { ProjectsPage } from './pages/ProjectsPage'
-import { TemplatesPage } from './pages/TemplatesPage'
-import { WorkflowBuilderPage } from './pages/WorkflowBuilderPage'
-import { SettingsPage } from './pages/SettingsPage'
-import { LoginPage } from './pages/LoginPage'
-import { RegisterPage } from './pages/RegisterPage'
+import { Layout } from './components/layout/layout'
+import { HomePage } from './pages/home-page'
+import { ProjectsPage } from './pages/projects-page'
+import { TemplatesPage } from './pages/templates-page'
+import { WorkflowBuilderPage } from './pages/workflow-builder-page'
+import { SettingsPage } from './pages/settings-page'
+import { LoginPage } from './pages/login-page'
+import { RegisterPage } from './pages/register-page'
 
-function App() {
+function App(): JSX.Element {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />

@@ -1,3 +1,3 @@
-export { useAuthStore } from './authStore'
-export { useWorkflowStore } from './workflowStore'
-export { useUIStore } from './uiStore'
+export { useAuthStore } from './auth-store'
+export { useWorkflowStore } from './workflow-store'
+export { useUIStore } from './ui-store'
