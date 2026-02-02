@@ -133,7 +133,14 @@ export function Layout(): JSX.Element {
                 </nav>
 
                 <div className="pt-4 border-t">
-                  <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start gap-3 text-muted-foreground"
+                    onClick={() => {
+                      localStorage.removeItem('token')
+                      window.location.href = '/'
+                    }}
+                  >
                     <LogOut className="h-5 w-5" />
                     Sign out
                   </Button>
@@ -297,7 +304,13 @@ export function Layout(): JSX.Element {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600">
+                  <DropdownMenuItem 
+                    className="text-red-600 cursor-pointer"
+                    onClick={() => {
+                      localStorage.removeItem('token')
+                      window.location.href = '/'
+                    }}
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign out
                   </DropdownMenuItem>
