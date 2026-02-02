@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  name          String?
+  avatarUrl     String?
+  orgId         String?
+  role          String    @default("member")
+  emailVerified Boolean   @default(false)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  org           Organization? @relation(fields: [orgId], references: [id])
+  memberships   OrganizationMember[]
+  projects      Project[]
+  workflows     Workflow[]
+  templates     Template[]
+  credentials   Credential[]
+  executions    Execution[] @relation("TriggeredBy")
+
+  @@index([email])
+  @@index([orgId])
+  @@map("users")
+}
+
+model Organization {
+  id                 String    @id @default(uuid())
+  name               String
+  slug               String    @unique
+  plan               String    @default("free")
+  settings           Json      @default("{}")
+  billingEmail       String?
+  subscriptionStatus String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  members    OrganizationMember[]
+  users      User[]
+  projects   Project[]
+  apiKeys    ApiKey[]
+  credentials Credential[]
+
+  @@index([slug])
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id        String   @id @default(uuid())
+  orgId     String
+  userId    String
+  role      String   @default("member")
+  joinedAt  DateTime @default(now())
+
+  org  Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, userId])
+  @@index([orgId])
+  @@index([userId])
+  @@map("organization_members")
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  orgId         String
+  name          String
+  description   String?
+  workflowData  Json     @default("{}")
+  status        String   @default("draft")
+  version       Int      @default(1)
+  isArchived    Boolean  @default(false)
+  createdBy     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator   User?        @relation(fields: [createdBy], references: [id])
+  workflows Workflow[]
+
+  @@index([orgId])
+  @@index([createdBy])
+  @@map("projects")
+}
+
+model Workflow {
+  id          String   @id @default(uuid())
+  projectId   String
+  name        String
+  description String?
+  nodes       Json
+  edges       Json
+  config      Json     @default("{}")
+  version     Int      @default(1)
+  isActive    Boolean  @default(true)
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  creator    User?       @relation(fields: [createdBy], references: [id])
+  executions Execution[]
+
+  @@index([projectId])
+  @@index([createdBy])
+  @@map("workflows")
+}
+
+model Execution {
+  id            String    @id @default(uuid())
+  workflowId    String
+  status        String
+  inputs        Json?
+  outputs       Json?
+  logs          Json      @default("[]")
+  errorMessage  String?
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  durationMs    Int?
+  triggeredBy   String?
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  user     User?    @relation("TriggeredBy", fields: [triggeredBy], references: [id])
+
+  @@index([workflowId])
+  @@index([triggeredBy])
+  @@index([status])
+  @@index([startedAt])
+  @@map("executions")
+}
+
+model Template {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  thumbnailUrl  String?
+  workflowData  Json
+  tags          String[] @default([])
+  category      String?
+  complexity    String?
+  usageCount    Int      @default(0)
+  isFeatured    Boolean  @default(false)
+  isPublic      Boolean  @default(true)
+  createdBy     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  creator User? @relation(fields: [createdBy], references: [id])
+
+  @@index([category])
+  @@index([isFeatured])
+  @@index([isPublic])
+  @@index([createdBy])
+  @@map("templates")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  orgId       String
+  provider    String
+  keyHash     String
+  name        String?
+  isActive    Boolean   @default(true)
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([provider])
+  @@map("api_keys")
+}
+
+model Credential {
+  id             String   @id @default(uuid())
+  orgId          String
+  provider       String
+  name           String
+  encryptedData  String
+  type           String
+  isActive       Boolean  @default(true)
+  createdBy      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  org    Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator User?       @relation(fields: [createdBy], references: [id])
+
+  @@index([orgId])
+  @@index([provider])
+  @@index([createdBy])
+  @@map("credentials")
+}
