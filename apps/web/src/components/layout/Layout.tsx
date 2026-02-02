@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/tooltip'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home, description: 'Overview & analytics' },
+  { name: 'Dashboard', href: '/dashboard', icon: Home, description: 'Overview & analytics' },
   { name: 'Projects', href: '/projects', icon: FolderOpen, description: 'Manage your workflows' },
   { name: 'Templates', href: '/templates', icon: LayoutTemplate, description: 'Pre-built solutions' },
   { name: 'Settings', href: '/settings', icon: Settings, description: 'Configure your account' },
