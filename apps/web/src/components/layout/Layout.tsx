@@ -46,6 +46,12 @@ export function Layout(): JSX.Element {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
 
+  const handleSignOut = () => {
+    localStorage.removeItem('token')
+    navigate('/', { replace: true })
+    window.location.reload()
+  }
+
   return (
     <TooltipProvider delayDuration={0}>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950/20">
@@ -136,10 +142,7 @@ export function Layout(): JSX.Element {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start gap-3 text-muted-foreground"
-                    onClick={() => {
-                      localStorage.removeItem('token')
-                      window.location.href = '/'
-                    }}
+                    onClick={handleSignOut}
                   >
                     <LogOut className="h-5 w-5" />
                     Sign out
@@ -306,10 +309,7 @@ export function Layout(): JSX.Element {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     className="text-red-600 cursor-pointer"
-                    onClick={() => {
-                      localStorage.removeItem('token')
-                      window.location.href = '/'
-                    }}
+                    onClick={handleSignOut}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign out
