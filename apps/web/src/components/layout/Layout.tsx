@@ -57,7 +57,7 @@ export function Layout(): JSX.Element {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950/20">
         {/* Mobile Header */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-50 glass border-b px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
+            <Link to="/dashboard" className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
               <Sparkles className="h-4 w-4 text-white" />
             </div>
@@ -162,7 +162,7 @@ export function Layout(): JSX.Element {
           >
             {/* Logo */}
             <div className="h-16 flex items-center px-6 border-b">
-              <Link to="/" className="flex items-center gap-3 overflow-hidden">
+              <Link to="/dashboard" className="flex items-center gap-3 overflow-hidden">
                 <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0">
                   <Sparkles className="h-4 w-4 text-white" />
                 </div>
